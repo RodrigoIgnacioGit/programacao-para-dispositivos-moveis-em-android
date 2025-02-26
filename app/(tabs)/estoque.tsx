@@ -1,38 +1,60 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';  
-import { useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
- 
- 
-const randomizeQuantity = (quantity: number) => {
-  return Math.max(1, quantity + Math.floor(Math.random() * 7 - 3));
-};
+
 
  
-const ProductBlock = ({
-  id,
-  produto,
-  quantidade,
-  atualizarQuantidade,
-}: {
-  id: string;
-  produto: string;
-  quantidade: number;
-  atualizarQuantidade: (id: string, newQuantity: number) => void;
-}) => {
+
+const initialProducts = [
+  { id: '1', produto: 'Arroz', preco: 7.99, quantidade: (0) },
+  { id: '2', produto: 'Feijão', preco: 7.49, quantidade: (0) },
+  { id: '3', produto: 'Café', preco: 24.99, quantidade: (0) },
+  { id: '4', produto: 'Chá', preco: 7.99, quantidade: (0) },
+  { id: '5', produto: 'Carne bovina', preco: 23.99, quantidade: (0) },
+  { id: '6', produto: 'Frango', preco: 13.99, quantidade: (0) },
+  { id: '7', produto: 'Batata', preco: 5.99, quantidade: (0) },
+  { id: '8', produto: 'Milho', preco: 5.79, quantidade: (0) },
+  { id: '9', produto: 'Aipim', preco: 15.99, quantidade: (0) },
+  { id: '10', produto: 'Amendoin', preco: 14.59, quantidade: (0) },
+  { id: '11', produto: 'Macarrão e massas', preco: 5.19, quantidade: (0) },
+  { id: '12', produto: 'Ervilha', preco: 13.22, quantidade: (0) },
+  { id: '13', produto: 'Tomate', preco: 8.48, quantidade: (0) },
+  { id: '14', produto: 'Pimenta', preco: 22.49, quantidade: (0) },
+  { id: '15', produto: 'Azeite', preco: 37.44, quantidade: (0) },
+  { id: '16', produto: 'Soja', preco: 15.45, quantidade: (0)},
+  { id: '17', produto: 'Refrigerante 1 350ml', preco: 4.29, quantidade: (0) },
+  { id: '18', produto: 'Refrigerante 2 2L', preco: 9.99, quantidade: (0) },
+  { id: '19', produto: 'Refrigerante 3 350ml', preco: 5.39, quantidade: (0) },
+  { id: '20', produto: 'Sal', preco: 3.09, quantidade: (0) },
+  { id: '21', produto: 'Manteiga', preco: 14.90, quantidade: (0) },
+  { id: '22', produto: 'Óleo de cozinha', preco: 10.00, quantidade: (0) },
+  { id: '23', produto: 'Queijo Mussarela', preco: 19.21, quantidade: (0) },
+  { id: '24', produto: 'Açúcar refinado', preco: 6.35, quantidade: (0) },
+  { id: '25', produto: 'Açúcar mascavo', preco: 9.90, quantidade: (0) },
+  { id: '26', produto: 'Leite condensado', preco: 8.00, quantidade: (0) },
+  { id: '27', produto: 'Leite', preco: 4.55, quantidade: (0) },
+  { id: '28', produto: 'Creme de leite', preco: 4.45, quantidade: (0) },
+  { id: '29', produto: 'Esponja de limpeza', preco: 1.99, quantidade: (0)},
+  { id: '30', produto: 'Desengordurante', preco: 12.87, quantidade: (0) },
+  { id: '31', produto: 'Cloro e Água Sanitária', preco: 34.59, quantidade: (0) },
+  { id: '32', produto: 'Álcool 70%', preco: 9.32, quantidade: (0) },
+  { id: '33', produto: 'Sabão em pó ou Líquido', preco: 8.99, quantidade: (0) },
+  { id: '34', produto: 'Desinfetante', preco: 15.99, quantidade: (0) },
+  { id: '35', produto: 'Detergente', preco: 5.99, quantidade: (0) },
+  { id: '36', produto: 'Limpa-forno', preco: 13.90, quantidade: (0) },
+];
+
+const ProductBlock = ({ id, produto, quantidade, atualizarQuantidade }) => {
   return (
     <View style={styles.item}>
       <Text style={styles.titulo}>{produto}</Text>
       <Text style={styles.texto}>Quantidade: {quantidade}</Text>
       <View style={styles.botoesContainer}>
         <TouchableOpacity
-          onPress={() => {
-            if (quantidade > 0) {
-              atualizarQuantidade(id, quantidade - 1);
-            }
-          }}
+          onPress={() => quantidade > 0 && atualizarQuantidade(id, quantidade - 1)}
           style={styles.botao}
           disabled={quantidade === 0}  
         >
@@ -50,72 +72,49 @@ const ProductBlock = ({
 };
 
 export default function TabTwoScreen() {
-const navigation = useNavigation();  
-useEffect(() => {
-  navigation.setOptions({
-    tabBarStyle: {display: 'none'},
-  });
+  const navigation = useNavigation();  
+  const [products, setProducts] = useState([]);
 
-  return()=>{
-    navigation.setOptions({
-      tabBarStyle: {display: 'flex'},
-    });
-    };
+  useEffect(() => {
+    navigation.setOptions({ tabBarStyle: { display: 'none' } });
+    return () => navigation.setOptions({ tabBarStyle: { display: 'flex' } });
   }, [navigation]);
 
- 
-  const initialProducts = [
-    { id: '1', produto: 'Arroz', preco: 7.99, quantidade: randomizeQuantity(6) },
-    { id: '2', produto: 'Feijão', preco: 7.49, quantidade: randomizeQuantity(6) },
-    { id: '3', produto: 'Café', preco: 24.99, quantidade: randomizeQuantity(6) },
-    { id: '4', produto: 'Chá', preco: 7.99, quantidade: randomizeQuantity(4) },
-    { id: '5', produto: 'Carne bovina', preco: 23.99, quantidade: randomizeQuantity(4) },
-    { id: '6', produto: 'Frango', preco: 13.99, quantidade: randomizeQuantity(4) },
-    { id: '7', produto: 'Batata', preco: 5.99, quantidade: randomizeQuantity(4) },
-    { id: '8', produto: 'Milho', preco: 5.79, quantidade: randomizeQuantity(4) },
-    { id: '9', produto: 'Aipim', preco: 15.99, quantidade: randomizeQuantity(4) },
-    { id: '10', produto: 'Amendoin', preco: 14.59, quantidade: randomizeQuantity(4) },
-    { id: '11', produto: 'Macarrão e massas', preco: 5.19, quantidade: randomizeQuantity(4) },
-    { id: '12', produto: 'Ervilha', preco: 13.22, quantidade: randomizeQuantity(4) },
-    { id: '13', produto: 'Tomate', preco: 8.48, quantidade: randomizeQuantity(4) },
-    { id: '14', produto: 'Pimenta', preco: 22.49, quantidade: randomizeQuantity(6) },
-    { id: '15', produto: 'Azeite', preco: 37.44, quantidade: randomizeQuantity(4) },
-    { id: '16', produto: 'Soja', preco: 15.45, quantidade: randomizeQuantity(4) },
-    { id: '17', produto: 'Refrigerante 1 350ml', preco: 4.29, quantidade: randomizeQuantity(4) },
-    { id: '18', produto: 'Refrigerante 2 2L', preco: 9.99, quantidade: randomizeQuantity(4) },
-    { id: '19', produto: 'Refrigerante 3 350ml', preco: 5.39, quantidade: randomizeQuantity(4) },
-    { id: '20', produto: 'Sal', preco: 3.09, quantidade: randomizeQuantity(4) },
-    { id: '21', produto: 'Manteiga', preco: 14.90, quantidade: randomizeQuantity(6) },
-    { id: '22', produto: 'Óleo de cozinha', preco: 10.00, quantidade: randomizeQuantity(4) },
-    { id: '23', produto: 'Queijo Mussarela', preco: 19.21, quantidade: randomizeQuantity(4) },
-    { id: '24', produto: 'Açúcar refinado', preco: 6.35, quantidade: randomizeQuantity(5) },
-    { id: '25', produto: 'Açúcar mascavo', preco: 9.90, quantidade: randomizeQuantity(3) },
-    { id: '26', produto: 'Leite condensado', preco: 8.00, quantidade: randomizeQuantity(3) },
-    { id: '27', produto: 'Leite', preco: 4.55, quantidade: randomizeQuantity(4) },
-    { id: '28', produto: 'Creme de leite', preco: 4.45, quantidade: randomizeQuantity(5) },
-    { id: '29', produto: 'Esponja de limpeza', preco: 1.99, quantidade: randomizeQuantity(7) },
-    { id: '30', produto: 'Desengordurante', preco: 12.87, quantidade: randomizeQuantity(5) },
-    { id: '31', produto: 'Cloro e Água Sanitária', preco: 34.59, quantidade: randomizeQuantity(7) },
-    { id: '32', produto: 'Álcool 70%', preco: 9.32, quantidade: randomizeQuantity(5) },
-    { id: '33', produto: 'Sabão em pó ou Líquido', preco: 8.99, quantidade: randomizeQuantity(7) },
-    { id: '34', produto: 'Desinfetante', preco: 15.99, quantidade: randomizeQuantity(5) },
-    { id: '35', produto: 'Detergente', preco: 5.99, quantidade: randomizeQuantity(5) },
-    { id: '36', produto: 'Limpa-forno', preco: 13.90, quantidade: randomizeQuantity(5) },
-  ];
+  useEffect(() => {
+    const loadProducts = async () => {
+      const storedProducts = await AsyncStorage.getItem('tabTwo_product_quantity_${id}');
+      if (storedProducts) {
+        setProducts(JSON.parse(storedProducts));
+      } else {
+        setProducts(initialProducts);
+        await AsyncStorage.setItem('tabTwo_product_quantity_${id}', JSON.stringify(initialProducts));
+      }
+    };
+    loadProducts();
+  }, []);
 
- 
-  const [products, setProducts] = useState(initialProducts);
-  const atualizarQuantidade = (id: string, newQuantity: number) => {
-    setProducts(prevProducts =>
-      prevProducts.map(product =>
-        product.id === id
-          ? { ...product, quantidade: newQuantity }
-          : product
-      )
+  const atualizarQuantidade = async (id, newQuantity) => {
+    const updatedProducts = products.map(product =>
+      product.id === id ? { ...product, quantidade: newQuantity } : product
+    );
+    setProducts(updatedProducts);
+    await AsyncStorage.setItem('tabTwo_product_quantity_${id}', JSON.stringify(updatedProducts));
+  };
+
+  const resetProducts = async () => {
+    Alert.alert(
+      'Resetar Estoque',
+      'Tem certeza de que deseja resetar todos os valores?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Sim', onPress: async () => {
+          await AsyncStorage.setItem('tabTwo_product_quantity_${id}', JSON.stringify(initialProducts));
+          setProducts(initialProducts);
+        } },
+      ]
     );
   };
   const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <>
       <View style={styles.headoutcontainer}>
@@ -136,7 +135,7 @@ useEffect(() => {
             <AntDesign name="shoppingcart" size={25} opacity={1} color={'white'}  />
         </TouchableOpacity>
            </View>
-  
+
         {products.map(product => (
           <ProductBlock
             key={product.id}
@@ -146,10 +145,15 @@ useEffect(() => {
             atualizarQuantidade={atualizarQuantidade}
           />
         ))}
+        <View style={styles.alertContainer}>
+        <TouchableOpacity style={styles.alertTitle} onPress={resetProducts}>
+          <Text style={styles.alertMessage}>Resetar Estoque</Text>
+        </TouchableOpacity></View>
       </ScrollView>
     </>
   );
 }
+
 const styles = StyleSheet.create({
   headoutcontainer: {
     marginBottom: -20,
@@ -251,5 +255,40 @@ const styles = StyleSheet.create({
     top: -40,
     opacity: 0.6,
     marginBottom: -28,
+  },
+  alertContainer: {
+    backgroundColor: "#1a1a1a",
+    padding:  20,
+    borderRadius: 8,
+    alignItems: "center",
+    width: '100%',
+    opacity: 0.9,
+    maxWidth:100,
+    left:138,
+    marginTop:8,
+    elevation:10,
+    paddingVertical:10,
+    marginBottom:16,
+    
+  },
+  alertTitle: {
+    fontSize:  1,
+    fontWeight: "bold",
+    color: "black",
+    top: 0,
+    left: 0,
+    width:"100%",
+    
+  },
+  alertMessage: {
+    fontSize: 16,
+    color: "#c5c5c5",
+    padding:  0,
+    textAlign: "center",
+    marginBottom: 0,
+    marginTop: 0,
+    width: '100%',
+    top: -2,
+    fontWeight: "bold",
   },
 });

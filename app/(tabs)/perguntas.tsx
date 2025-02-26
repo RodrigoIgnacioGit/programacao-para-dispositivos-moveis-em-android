@@ -72,14 +72,21 @@ export default function TabTwoScreen3() {
       </Collapsible>
 
       <Collapsible title="Como faço para adicionar ou remover os produtos e ingredientes do estoque das filiais do Maná Comida Express?">
-      <Text style={styles.texto}>Para poder adicionar ou remover os produtos e ingredientes dos estoques das filiais do Maná Comida Express dentro do Maná App, você precisará primeiro ir até a página de "Início" <IconSymbol size={21} name="house.fill" color='black' /> , abrir o menu de filiais cadastradas, logo após isso terá que escolher uma das filiais mostradas, então clicar no botão "Estoque" <Entypo name="box" size={21} color="black"/> , nesta página você deverá procurar pelo item desejado e caso escolha adicionar clique no botão " <Text style={styles.botaoTexto}> + </Text> ", para remover basta clicar no botão "<Text style={styles.botaoTexto}> - </Text>".
+      <Text style={styles.texto}>Para poder adicionar ou remover os produtos e ingredientes dos estoques das filiais do Maná Comida Express dentro do Maná App, você precisará primeiro ir até a página de "Início" <IconSymbol size={21} name="house.fill" color='black'/>, abrir o menu de filiais cadastradas, logo após isso terá que escolher uma das filiais mostradas, então clicar no botão "Estoque" <Entypo name="box" size={21} color="black"/>, nesta página você deverá procurar pelo item desejado e caso escolha adicionar clique no botão " <Text style={styles.botaoTexto}> + </Text>", para remover basta clicar no botão " <Text style={styles.botaoTexto}> - </Text>".
+  
+        </Text>
+  
+      </Collapsible>
+
+      <Collapsible title="Como faço para resetar todos as quantidades dos protudos no estoque do Maná App?">
+      <Text style={styles.texto}>Para reiniciar o estoque das filiais, basta ir em "Início" <IconSymbol size={21} name="house.fill" color='black' /> e depois clicar no botão lateral de filiais cadastradas "Abrir" <AntDesign name="menuunfold" size={21} color="black" />, logo após isso, selecione a filial desejada e clique em "Estoque" <Entypo name="box" size={21} color="black"/>, desça a página completamente e achará um botão para poder resetar o estoque.
   
         </Text>
   
       </Collapsible>
 
       <Collapsible title="Como faço para fazer uma solicitação de algum produto no Estoque do Maná Comida Express?">
-      <Text style={styles.texto}>Para fazer solicitação de produtos e/ou ingredientes que estão faltando no estoque do Maná Comida Express, dentro do Maná App o colaborador deverá clicar no menu "Solicitar" <AntDesign name="shoppingcart" size={21} color="black" /> , então abrirá uma página que contém todos os itens que estão na página de "Estoque" <Entypo name="box" size={21} color="black"/> e lá o usuário poderá solicitar os produtos e/ou ingredientes que estão em falta, o colaborador poderá adicionar os itens, que estão separados em suas categorias próprias, separados em cada uma das filiais e então basta clicar em <AntDesign name="shoppingcart" size={21} color="#F4C32E" /> que os itens serão solicitados.
+      <Text style={styles.texto}>Para fazer solicitação de produtos e/ou ingredientes que estão faltando no estoque do Maná Comida Express, dentro do Maná App o colaborador deverá clicar no menu "Solicitar" <AntDesign name="shoppingcart" size={21} color="black" />, então abrirá uma página que contém todos os itens que estão na página de "Estoque"  <Entypo name="box" size={21} color="black"/> e lá o usuário poderá solicitar os produtos e/ou ingredientes que estão em falta, o colaborador poderá adicionar os itens, que estão separados em suas categorias próprias, separados em cada uma das filiais e então basta clicar em <AntDesign name="shoppingcart" size={21} color="#F4C32E" /> que os itens serão solicitados.
    
         </Text>
   
@@ -265,7 +272,7 @@ const styles = StyleSheet.create({
      
     paddingRight: 0,
      marginBottom: 0,
-     marginVertical:0,
+     marginVertical:5,
     marginRight: 10,
     paddingBottom: 5,
     fontWeight: 'bold',
@@ -372,6 +379,8 @@ botaoTexto: {
 numbertel: {
   color: 'black',
   fontSize: 18,
+  
+   lineHeight:23
   
 }
 });

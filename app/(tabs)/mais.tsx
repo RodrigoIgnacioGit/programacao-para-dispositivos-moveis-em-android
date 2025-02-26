@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
+const chaveFilial1 = 'tabTwo_product_quantity_$[id}';
+const chaveFilial2 = 'tabTwo2_product_quantity_${id}';
 
 interface Item {
+  id: string;
   nome: string;
   preco: string;
   quantidade: number;
@@ -28,48 +35,48 @@ const filiais: Filial[] = [
     nome: "Filial 1",
     categorias: [
       { id: "1", nome: "Cozinha", itens: [
-        { nome: "Sal", preco: "3.09", quantidade: 0, filialId: "1" }, 
-        { nome: "Manteiga", preco: "14.90", quantidade: 0, filialId: "1" }, 
-        { nome: "Óleo de cozinha", preco: "10.00", quantidade: 0, filialId: "1" },
-        { nome: "Queijo Mussarela", preco: "19.21", quantidade: 0, filialId: "1" }, 
-        { nome: "Açúcar refinado", preco: "6.35", quantidade: 0, filialId: "1" }, 
-        { nome: "Açúcar mascavo", preco: "9.90", quantidade: 0, filialId: "1" },
-        { nome: "Leite condensado", preco: "8.00", quantidade: 0, filialId: "1" }, 
-        { nome: "Leite", preco: "4.55", quantidade: 0, filialId: "1" }, 
-        { nome: "Creme de leite", preco: "4.45", quantidade: 0, filialId: "1" }]},
+        { id: "20", nome: "Sal", preco: "3.09", quantidade: 0, filialId: "1" }, 
+        { id: "21", nome: "Manteiga", preco: "14.90", quantidade: 0, filialId: "1" }, 
+        { id: "22", nome: "Óleo de cozinha", preco: "10.00", quantidade: 0, filialId: "1" },
+        { id: "23", nome: "Queijo Mussarela", preco: "19.21", quantidade: 0, filialId: "1" }, 
+        { id: "24", nome: "Açúcar refinado", preco: "6.35", quantidade: 0, filialId: "1" }, 
+        { id: "25", nome: "Açúcar mascavo", preco: "9.90", quantidade: 0, filialId: "1" },
+        { id: "26", nome: "Leite condensado", preco: "8.00", quantidade: 0, filialId: "1" }, 
+        { id: "27", nome: "Leite", preco: "4.55", quantidade: 0, filialId: "1" }, 
+        { id: "28", nome: "Creme de leite", preco: "4.45", quantidade: 0, filialId: "1" }]},
      
         { id: "2", nome: "Estoque", itens: [
-        { nome: "Arroz", preco: "7.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Feijão", preco: "7.49", quantidade: 0, filialId: "1" }, 
-        { nome: "Café", preco: "24.99", quantidade: 0, filialId: "1" },
-        { nome: "Chá", preco: "7.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Carne bovina", preco: "23.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Frango", preco: "13.99", quantidade: 0, filialId: "1" },
-        { nome: "Batata", preco: "5.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Milho", preco: "5.79", quantidade: 0, filialId: "1" }, 
-        { nome: "Aipim", preco: "15.99", quantidade: 0, filialId: "1" },
-        { nome: "Amendoin", preco: "14.59", quantidade: 0, filialId: "1" }, 
-        { nome: "Macarrão e massas", preco: "5.19", quantidade: 0, filialId: "1" }, 
-        { nome: "Ervilha", preco: "13.22", quantidade: 0, filialId: "1" },
-        { nome: "Tomate", preco: "8.48", quantidade: 0, filialId: "1" },
-        { nome: "Pimenta", preco: "22.49", quantidade: 0, filialId: "1" }, 
-        { nome: "Azeite", preco: "37.44", quantidade: 0, filialId: "1" }, 
-        { nome: "Soja", preco: "15.45", quantidade: 0, filialId: "1" },
-        { nome: "Refrigerante 1 350ml", preco: "4.29", quantidade: 0, filialId: "1" },
-        { nome: "Refrigerante 2 2L", preco: "9.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Refrigerante 3 350ml", preco: "5.39", quantidade: 0, filialId: "1"},
-        { nome: "Pudim", preco: "550.490 em BTC", quantidade: 0, filialId: "1"}]},
+        { id: "1", nome: "Arroz", preco: "7.99", quantidade: 0, filialId: "1" }, 
+        { id: "2", nome: "Feijão", preco: "7.49", quantidade: 0, filialId: "1" }, 
+        { id: "3", nome: "Café", preco: "24.99", quantidade: 0, filialId: "1" },
+        { id: "4", nome: "Chá", preco: "7.99", quantidade: 0, filialId: "1" }, 
+        { id: "5", nome: "Carne bovina", preco: "23.99", quantidade: 0, filialId: "1" }, 
+        { id: "6", nome: "Frango", preco: "13.99", quantidade: 0, filialId: "1" },
+        { id: "7", nome: "Batata", preco: "5.99", quantidade: 0, filialId: "1" }, 
+        { id: "8", nome: "Milho", preco: "5.79", quantidade: 0, filialId: "1" }, 
+        { id: "9", nome: "Aipim", preco: "15.99", quantidade: 0, filialId: "1" },
+        { id: "10", nome: "Amendoin", preco: "14.59", quantidade: 0, filialId: "1" }, 
+        { id: "11", nome: "Macarrão e massas", preco: "5.19", quantidade: 0, filialId: "1" }, 
+        { id: "12", nome: "Ervilha", preco: "13.22", quantidade: 0, filialId: "1" },
+        { id: "13", nome: "Tomate", preco: "8.48", quantidade: 0, filialId: "1" },
+        { id: "14", nome: "Pimenta", preco: "22.49", quantidade: 0, filialId: "1" }, 
+        { id: "15", nome: "Azeite", preco: "37.44", quantidade: 0, filialId: "1" }, 
+        { id: "16", nome: "Soja", preco: "15.45", quantidade: 0, filialId: "1" },
+        { id: "17", nome: "Refrigerante 1 350ml", preco: "4.29", quantidade: 0, filialId: "1" },
+        { id: "18", nome: "Refrigerante 2 2L", preco: "9.99", quantidade: 0, filialId: "1" }, 
+        { id: "19", nome: "Refrigerante 3 350ml", preco: "5.39", quantidade: 0, filialId: "1"},
+        { id: "666", nome: "Pudim", preco: "550.490 em BTC", quantidade: 0, filialId: "1"}]},
        
 
         { id: "3", nome: "Limpeza", itens: [
-        { nome: "Esponja de Limpeza", preco: "1.99", quantidade: 0, filialId: "1"},
-        { nome: "Desengordurante", preco: "12.87", quantidade: 0, filialId: "1" }, 
-        { nome: "Cloro e Água Sanitária", preco: "34.59", quantidade: 0, filialId: "1" }, 
-        { nome: "Álcool 70%", preco: "9.32", quantidade: 0, filialId: "1" },
-        { nome: "Sabão em pó ou Líquido", preco: "8.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Desinfetante", preco: "15.99", quantidade: 0, filialId: "1" }, 
-        { nome: "Detergente", preco: "5.99", quantidade: 0, filialId: "1" },
-        { nome: "Limpa-forno", preco: "13.90", quantidade: 0, filialId: "1"}]},
+        { id: "29", nome: "Esponja de Limpeza", preco: "1.99", quantidade: 0, filialId: "1"},
+        { id: "30", nome: "Desengordurante", preco: "12.87", quantidade: 0, filialId: "1" }, 
+        { id: "31", nome: "Cloro e Água Sanitária", preco: "34.59", quantidade: 0, filialId: "1" }, 
+        { id: "32", nome: "Álcool 70%", preco: "9.32", quantidade: 0, filialId: "1" },
+        { id: "33", nome: "Sabão em pó ou Líquido", preco: "8.99", quantidade: 0, filialId: "1" }, 
+        { id: "34", nome: "Desinfetante", preco: "15.99", quantidade: 0, filialId: "1" }, 
+        { id: "35", nome: "Detergente", preco: "5.99", quantidade: 0, filialId: "1" },
+        { id: "36", nome: "Limpa-forno", preco: "13.90", quantidade: 0, filialId: "1"}]},
     ],
   },
   {
@@ -77,54 +84,56 @@ const filiais: Filial[] = [
     nome: "Filial 2",
     categorias: [
       { id: "1", nome: "Cozinha", itens: [
-        { nome: "Sal", preco: "3.09", quantidade: 0, filialId: "2" }, 
-        { nome: "Manteiga", preco: "14.90", quantidade: 0, filialId: "2" }, 
-        { nome: "Óleo de cozinha", preco: "10.00", quantidade: 0, filialId: "2" },
-        { nome: "Queijo Mussarela", preco: "19.21", quantidade: 0, filialId: "2" }, 
-        { nome: "Açúcar refinado", preco: "6.35", quantidade: 0, filialId: "2" }, 
-        { nome: "Açúcar mascavo", preco: "9.90", quantidade: 0, filialId: "2" },
-        { nome: "Leite condensado", preco: "8.00", quantidade: 0, filialId: "2" }, 
-        { nome: "Leite", preco: "4.55", quantidade: 0, filialId: "2" }, 
-        { nome: "Creme de leite", preco: "4.45", quantidade: 0, filialId: "2" }]},
+        { id: "20", nome: "Sal", preco: "3.09", quantidade: 0, filialId: "2" }, 
+        { id: "21", nome: "Manteiga", preco: "14.90", quantidade: 0, filialId: "2" }, 
+        { id: "22", nome: "Óleo de cozinha", preco: "10.00", quantidade: 0, filialId: "2" },
+        { id: "23", nome: "Queijo Mussarela", preco: "19.21", quantidade: 0, filialId: "2" }, 
+        { id: "24", nome: "Açúcar refinado", preco: "6.35", quantidade: 0, filialId: "2" }, 
+        { id: "25", nome: "Açúcar mascavo", preco: "9.90", quantidade: 0, filialId: "2" },
+        { id: "26", nome: "Leite condensado", preco: "8.00", quantidade: 0, filialId: "2" }, 
+        { id: "27", nome: "Leite", preco: "4.55", quantidade: 0, filialId: "2" }, 
+        { id: "28", nome: "Creme de leite", preco: "4.45", quantidade: 0, filialId: "2" }]},
      
         { id: "2", nome: "Estoque", itens: [
-        { nome: "Arroz", preco: "7.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Feijão", preco: "7.49", quantidade: 0, filialId: "2" }, 
-        { nome: "Café", preco: "24.99", quantidade: 0, filialId: "2" },
-        { nome: "Chá", preco: "7.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Carne bovina", preco: "23.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Frango", preco: "13.99", quantidade: 0, filialId: "2" },
-        { nome: "Batata", preco: "5.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Milho", preco: "5.79", quantidade: 0, filialId: "2" }, 
-        { nome: "Aipim", preco: "15.99", quantidade: 0, filialId: "2" },
-        { nome: "Amendoin", preco: "14.59", quantidade: 0, filialId: "2" }, 
-        { nome: "Macarrão e massas", preco: "5.19", quantidade: 0, filialId: "2" }, 
-        { nome: "Ervilha", preco: "13.22", quantidade: 0, filialId: "2" },
-        { nome: "Tomate", preco: "8.48", quantidade: 0, filialId: "2" },
-        { nome: "Pimenta", preco: "22.49", quantidade: 0, filialId: "2" }, 
-        { nome: "Azeite", preco: "37.44", quantidade: 0, filialId: "2" }, 
-        { nome: "Soja", preco: "15.45", quantidade: 0, filialId: "2" },
-        { nome: "Refrigerante 1 350ml", preco: "4.29", quantidade: 0, filialId: "2" },
-        { nome: "Refrigerante 2 2L", preco: "9.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Refrigerante 3 350ml", preco: "5.39", quantidade: 0, filialId: "2"},
-        { nome: "Pudim", preco: "550.490 em BTC", quantidade: 0, filialId: "2"}]},
+          { id: "1", nome: "Arroz", preco: "7.99", quantidade: 0, filialId: "2" }, 
+          { id: "2", nome: "Feijão", preco: "7.49", quantidade: 0, filialId: "2" }, 
+          { id: "3", nome: "Café", preco: "24.99", quantidade: 0, filialId: "2" },
+          { id: "4", nome: "Chá", preco: "7.99", quantidade: 0, filialId: "2" }, 
+          { id: "5", nome: "Carne bovina", preco: "23.99", quantidade: 0, filialId: "2" }, 
+          { id: "6", nome: "Frango", preco: "13.99", quantidade: 0, filialId: "2" },
+          { id: "7", nome: "Batata", preco: "5.99", quantidade: 0, filialId: "2" }, 
+          { id: "8", nome: "Milho", preco: "5.79", quantidade: 0, filialId: "2" }, 
+          { id: "9", nome: "Aipim", preco: "15.99", quantidade: 0, filialId: "2" },
+          { id: "10", nome: "Amendoin", preco: "14.59", quantidade: 0, filialId: "2" }, 
+          { id: "11", nome: "Macarrão e massas", preco: "5.19", quantidade: 0, filialId: "2" }, 
+          { id: "12", nome: "Ervilha", preco: "13.22", quantidade: 0, filialId: "2" },
+          { id: "13", nome: "Tomate", preco: "8.48", quantidade: 0, filialId: "2" },
+          { id: "14", nome: "Pimenta", preco: "22.49", quantidade: 0, filialId: "2" }, 
+          { id: "15", nome: "Azeite", preco: "37.44", quantidade: 0, filialId: "2" }, 
+          { id: "16", nome: "Soja", preco: "15.45", quantidade: 0, filialId: "2" },
+          { id: "17", nome: "Refrigerante 1 350ml", preco: "4.29", quantidade: 0, filialId: "2" },
+          { id: "18", nome: "Refrigerante 2 2L", preco: "9.99", quantidade: 0, filialId: "2" }, 
+          { id: "19", nome: "Refrigerante 3 350ml", preco: "5.39", quantidade: 0, filialId: "2"},
+          { id: "666", nome: "Pudim", preco: "550.490 em BTC", quantidade: 0, filialId: "2"}]},
        
 
         { id: "3", nome: "Limpeza", itens: [
-        { nome: "Esponja de Limpeza", preco: "1.99", quantidade: 0, filialId: "2"},
-        { nome: "Desengordurante", preco: "12.87", quantidade: 0, filialId: "2" }, 
-        { nome: "Cloro e Água Sanitária", preco: "34.59", quantidade: 0, filialId: "2" }, 
-        { nome: "Álcool 70%", preco: "9.32", quantidade: 0, filialId: "2" },
-        { nome: "Sabão em pó ou Líquido", preco: "8.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Desinfetante", preco: "15.99", quantidade: 0, filialId: "2" }, 
-        { nome: "Detergente", preco: "5.99", quantidade: 0, filialId: "2" },
-        { nome: "Limpa-forno", preco: "13.90", quantidade: 0, filialId: "2"}]},
+          { id: "29", nome: "Esponja de Limpeza", preco: "1.99", quantidade: 0, filialId: "2"},
+          { id: "30", nome: "Desengordurante", preco: "12.87", quantidade: 0, filialId: "2" }, 
+          { id: "31", nome: "Cloro e Água Sanitária", preco: "34.59", quantidade: 0, filialId: "2" }, 
+          { id: "32", nome: "Álcool 70%", preco: "9.32", quantidade: 0, filialId: "2" },
+          { id: "33", nome: "Sabão em pó ou Líquido", preco: "8.99", quantidade: 0, filialId: "2" }, 
+          { id: "34", nome: "Desinfetante", preco: "15.99", quantidade: 0, filialId: "2" }, 
+          { id: "35", nome: "Detergente", preco: "5.99", quantidade: 0, filialId: "2" },
+          { id: "36", nome: "Limpa-forno", preco: "13.90", quantidade: 0, filialId: "2"}]},
     ],
   },
 ];
 
 export default function App() {
-    const [text, setText] = useState("");
+  
+  const [products, setProducts] = useState([]);
+  const [text, setText] = useState("");
   const [filiaisState, setFiliaisState] = useState(filiais);
   const [filialSelecionada, setFilialSelecionada] = useState(filiais[0]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(filialSelecionada.categorias[0]);
@@ -141,21 +150,29 @@ export default function App() {
   };
 
 
-  const adicionarItem = (item: Item) => {
+  const adicionarItem = async (item: Item) => {
      
-    const filiaisAtualizadas = [...filiaisState];
-    const filialIndex = filiaisAtualizadas.findIndex(f => f.id === item.filialId);
-    const categoriaIndex = filiaisAtualizadas[filialIndex].categorias.findIndex(c => c.id === categoriaSelecionada.id);
-    const itemIndex = filiaisAtualizadas[filialIndex].categorias[categoriaIndex].itens.findIndex(i => i.nome === item.nome);
-
-    if (itemIndex !== -1) {
-      filiaisAtualizadas[filialIndex].categorias[categoriaIndex].itens[itemIndex].quantidade += 1;  
-    }
-
-    setFiliaisState(filiaisAtualizadas);  
-    setCategoriaSelecionada(filiaisAtualizadas[filialIndex].categorias[categoriaIndex]); 
-  };
-
+     
+     const filiaisAtualizadas = [...filiaisState];
+     const filialIndex = filiaisAtualizadas.findIndex(f => f.id === item.filialId);
+     const categoriaIndex = filiaisAtualizadas[filialIndex].categorias.findIndex(c => c.id === categoriaSelecionada.id);
+     const itemIndex = filiaisAtualizadas[filialIndex].categorias[categoriaIndex].itens.findIndex(i => i.nome === item.nome);
+   
+     if (itemIndex !== -1) {
+       filiaisAtualizadas[filialIndex].categorias[categoriaIndex].itens[itemIndex].quantidade += 1;
+     }
+   
+     setFiliaisState(filiaisAtualizadas);
+     setCategoriaSelecionada(filiaisAtualizadas[filialIndex].categorias[categoriaIndex]); 
+   
+     
+     try {
+       await AsyncStorage.setItem('tabTwo_product_quantity_$[item.id}', JSON.stringify(filiaisAtualizadas[filialIndex].categorias[categoriaIndex].itens[itemIndex].quantidade));
+     } catch (error) {
+       console.error("Erro ao salvar no AsyncStorage", error);
+     }
+   };
+ 
   const resetarQuantidades = () => {
      
     const filiaisAtualizadas = filiaisState.map(filial => ({
@@ -207,7 +224,7 @@ export default function App() {
 
       <FlatList
         data={categoriaSelecionada.itens}
-        keyExtractor={(item) => item.nome + item.filialId}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           
           <View style={styles.item}>
@@ -277,9 +294,16 @@ export default function App() {
           <Ionicons name="send" size={20} left={1} color="#3A3A3A" />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.openModalButton} onPress={() => setModalVisible(true)}>
-        <AntDesign name="shoppingcart" size={40} opacity={0.7} color="#F4C32E" />
-      </TouchableOpacity>
+      <TouchableOpacity 
+  style={styles.openModalButton} 
+  onPress={() => {
+     
+    
+    setModalVisible(true);  
+  }}
+>
+  <AntDesign name="shoppingcart" size={40} opacity={0.7} color="#F4C32E" />
+</TouchableOpacity>
       </View>
       
 
@@ -346,7 +370,7 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   containerbotao2:{
-maxHeight:50,
+maxHeight:70,
 marginBottom: 0,
  borderTopColor: '#1a1a1a',
  borderBottomColor: '#1a1a1a',
@@ -524,7 +548,7 @@ minHeight:'10%'
  
   openModalButton: {
     position: 'absolute',
-    bottom:  4.5,
+    bottom:  6.5,
     right: 60,
     padding:4,
     paddingLeft:3,
@@ -533,6 +557,7 @@ minHeight:'10%'
     paddingBottom:3,
     borderRadius: 12,   
     borderWidth:2,
+    
    
    
   },
